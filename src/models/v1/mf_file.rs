@@ -1,6 +1,6 @@
+use chrono::{DateTime, Local};
 use serde::{Deserialize, Serialize};
 use std::{fmt::Display, vec};
-use chrono::{DateTime, Local};
 
 #[derive(Deserialize, Debug, Clone)]
 pub struct MFFile {

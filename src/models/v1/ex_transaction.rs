@@ -47,13 +47,13 @@ pub struct ExTransactionModel {
     created_at: Option<String>,
     updated_at: Option<String>,
     receipt_type: Option<String>,
-    office_member: Option<String>, //TODO
-    ex_item: Option<String>, //TODO
-    dr_excise: Option<String>, //TODO
-    cr_item: Option<String>, //TODO
-    cr_sub_item: Option<String>, //TODO
-    project_code: Option<String>, //TODO
-    ex_report: Option<String>, //TODO
+    office_member: Option<String>,  //TODO
+    ex_item: Option<String>,        //TODO
+    dr_excise: Option<String>,      //TODO
+    cr_item: Option<String>,        //TODO
+    cr_sub_item: Option<String>,    //TODO
+    project_code: Option<String>,   //TODO
+    ex_report: Option<String>,      //TODO
     ex_report_unit: Option<String>, //TODO
     mf_file: Option<MFFile>,
     attendants: Option<Vec<Attendant>>,
@@ -84,7 +84,7 @@ struct AttentdantsSummay {
     own_name: Option<String>,
     own_count: Option<u8>,
     other_name: Option<String>,
-    other_count: Option<u8>
+    other_count: Option<u8>,
 }
 
 #[derive(Deserialize, Debug, Clone)]
@@ -101,7 +101,6 @@ struct ExTransactionCustomFieldValues {
     value: Option<String>,
     name: Option<String>,
 }
-
 
 #[derive(Deserialize, Debug, Clone)]
 pub struct ExTransactionResponse {

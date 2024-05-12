@@ -2,10 +2,9 @@ use chrono::format;
 
 use crate::client::Client;
 use crate::client::VERSION;
-use crate::models::v1::ex_transaction::{ExTransactionParameters};
+use crate::models::v1::ex_transaction::ExTransactionParameters;
 use std::fmt;
 use tracing_test::traced_test;
-
 
 pub struct ExTransaction<'a> {
     client: &'a Client,
@@ -21,7 +20,7 @@ impl ExTransaction<'_> {
     pub async fn list(
         &self,
         version: VERSION,
-        office_id: String,        
+        office_id: String,
         query: Option<ExTransactionParameters>,
     ) -> Result<String, fmt::Error> {
         let path = format!("{}/me/ex_transactions", office_id);
@@ -46,7 +45,7 @@ impl ExTransaction<'_> {
     }
     pub async fn list_office_transaction(&self) -> String {
         todo!();
-    }    
+    }
     pub async fn find_office_transaction(&self) -> String {
         todo!();
     }
@@ -80,9 +79,6 @@ impl ExTransaction<'_> {
     pub async fn list_ex_journal(&self) -> String {
         todo!();
     }
-
-    
-
 }
 
 #[cfg(test)]
@@ -96,14 +92,14 @@ mod tests {
     async fn list() {
         let api_key = std::env::var("MF_ACCESS_TOKEN").unwrap();
         let office_id = std::env::var("MF_OFFICE_ID").unwrap();
-        let params: ExTransactionParameters = ExTransactionParameters { 
-            ..Default::default() 
+        let params: ExTransactionParameters = ExTransactionParameters {
+            ..Default::default()
         };
-        
+
         let client = Client::new(api_key);
         let a = client
             .ex_transaction()
-            .list(VERSION::V1, office_id, Some(params))            
+            .list(VERSION::V1, office_id, Some(params))
             .await
             .unwrap();
     }

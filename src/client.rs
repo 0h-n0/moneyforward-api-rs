@@ -3,7 +3,7 @@ use reqwest;
 use serde::Serialize;
 use std::{collections::HashMap, fs::create_dir};
 use tokio;
-use tracing::{info, debug, error};
+use tracing::{debug, error, info};
 
 static MF_BASE_URL: &str = "https://expense.moneyforward.com/api/external";
 
@@ -53,8 +53,7 @@ impl Client {
             .bearer_auth(&self.api_key);
         request
     }
-    pub async fn get(&self, path: &str, version: VERSION) -> Result<String, fmt::Error> 
-    {
+    pub async fn get(&self, path: &str, version: VERSION) -> Result<String, fmt::Error> {
         let response = self
             .build_request(reqwest::Method::GET, path, version, "application/json")
             .send()
