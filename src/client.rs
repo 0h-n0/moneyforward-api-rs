@@ -1,61 +1,85 @@
-use tokio;
-use std::{collections::HashMap, fs::create_dir};
+use core::fmt;
 use reqwest;
+use serde::Serialize;
+use std::{collections::HashMap, fs::create_dir};
+use tokio;
 
-static MF_V1_BASE_URL: &str = "https://expense.moneyforward.com/api/external/v1/offices";
-static MF_V2_BASE_URL: &str = "https://expense.moneyforward.com/api/external/v2/offices";
 
+static MF_BASE_URL: &str = "https://expense.moneyforward.com/api/external";
+
+#[derive(Debug, Copy, Clone)]
+pub enum VERSION {
+    V1,
+    V2,
+}
+
+impl fmt::Display for VERSION {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            VERSION::V1 => write!(f, "v1"),
+            VERSION::V2 => write!(f, "v2"),
+        }
+    }
+}
+
+#[derive(Debug, Clone)]
 pub struct Client {
     pub http_client: reqwest::Client,
     pub base_url: String,
     pub api_key: String,
-    headers: reqwest::header::HeaderMap
 }
 
-impl Client {    
-    pub fn new(token: Option<String>) -> Self {
-        let client = Client::new();
-        let headers = MFExpenseClient::create_header(&token);        
-        Self {token, client, headers}
-    }
-    fn create_header(token: &Option<String>) -> reqwest::header::HeaderMap {
-        let mut headers = reqwest::header::HeaderMap::new();
-        let token = match std::env::var("MF_ACCESS_TOKEN") {
-                Ok(t) => t,
-                Err(e) => "error".to_string(),
-            };
-            headers.insert("Authorization", format!("Bearer {}", &token).parse().unwrap());
-            headers.insert("Accept", "application/json".parse().unwrap());
-        headers
-    }
-
-    pub async fn offices(&self, page: u32) -> reqwest::Result<reqwest::Response>{
-        let url = format!("{}external/v1/offices?page={}", MF_URL, page);
-        println!("{:?}", &url);
-        let c = self.client.get(url)  
-            .headers(MFExpenseClient::create_header(&None));
-        println!("{:?}", &c);
-
-        let res = c.send()
-            .await?;        
-        Ok(res)
-    }
-
-}
-
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[tokio::test]
-    async fn it_works() {
-        let client = MFExpenseClient::new(Some("hello".into()));
-        let res = client.offices(1).await;
-        match res {
-            Ok(x) => println!("{:?}", x.json().await),
-            _ => println!("{:?}", res),
+impl Client {
+    pub fn new(api_key: String) -> Self {
+        Self {
+            http_client: reqwest::Client::new(),
+            base_url: MF_BASE_URL.to_string(),
+            api_key: api_key,
         }
-        
     }
+    pub fn build_request(
+        &self,
+        method: reqwest::Method,
+        path: &str,
+        version: VERSION,
+        content_type: &str,
+    ) -> reqwest::RequestBuilder {
+        let url = format!("{}/{}/offices/{}", self.base_url, version, path);
+        let mut request = self
+            .http_client
+            .request(method, &url)
+            .header(reqwest::header::CONTENT_TYPE, content_type)
+            .bearer_auth(&self.api_key);
+        request
+    }
+    pub async fn get(&self, path: &str, version: VERSION) -> Result<String, fmt::Error> 
+    {
+        let response = self
+            .build_request(reqwest::Method::GET, path, version, "application/json")
+            .send()
+            .await
+            .unwrap();
+        let text = response.text().await.unwrap();
+        Ok(text)
+    }
+    pub async fn get_with_query<Q>(
+        &self,
+        path: &str,
+        version: VERSION,
+        query: &Q,
+    ) -> Result<String, fmt::Error>
+    where
+        Q: Serialize,
+    {
+        let response = self
+            .build_request(reqwest::Method::GET, path, version, "application/json")
+            .query(&query)
+            .send()
+            .await
+            .unwrap();
+        let text = response.text().await.unwrap();
+        Ok(text)
+    }
+
+    pub async fn post(self) {}
 }
