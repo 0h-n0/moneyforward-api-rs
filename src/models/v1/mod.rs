@@ -1,4 +1,5 @@
 pub mod office;
+pub mod ex_transaction;
 pub mod ex_report;
 pub mod expense_report;
 pub mod general_report;

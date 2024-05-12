@@ -3,7 +3,7 @@ use reqwest;
 use serde::Serialize;
 use std::{collections::HashMap, fs::create_dir};
 use tokio;
-
+use tracing::{info, debug, error};
 
 static MF_BASE_URL: &str = "https://expense.moneyforward.com/api/external";
 
@@ -45,6 +45,7 @@ impl Client {
         content_type: &str,
     ) -> reqwest::RequestBuilder {
         let url = format!("{}/{}/offices/{}", self.base_url, version, path);
+        debug!("url: {}", url);
         let mut request = self
             .http_client
             .request(method, &url)
@@ -77,6 +78,7 @@ impl Client {
             .send()
             .await
             .unwrap();
+        debug!("status: {:?}", response.status());
         let text = response.text().await.unwrap();
         Ok(text)
     }

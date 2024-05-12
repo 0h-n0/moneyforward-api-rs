@@ -6,7 +6,7 @@ unofficial Rust based moneyforward api library.
 
 ## TODO
 
-- [ ] office
+- [x] office
 - [ ] ex_report
 - [ ] expense_report
 - [ ] general_report

@@ -14,7 +14,7 @@ impl Client {
 }
 
 impl Office<'_> {
-    pub async fn page(
+    pub async fn list(
         &self,
         version: VERSION,
         query: Option<OfficeParameters>,
@@ -36,7 +36,7 @@ mod tests {
         let client = Client::new(api_key);
         let a = client
             .office()
-            .page(VERSION::V1, Some(params))
+            .list(VERSION::V1, Some(params))
             .await
             .unwrap();
         println!("{:?}", a);
