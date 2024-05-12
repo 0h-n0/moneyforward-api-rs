@@ -29,6 +29,60 @@ impl ExTransaction<'_> {
         //let model = serde_json::from_str::<OfficeResponse>(&res).unwrap();
         Ok(res)
     }
+    pub async fn create_transaction(&self) -> String {
+        todo!();
+    }
+    pub async fn find_transaction(&self) -> String {
+        todo!();
+    }
+    pub async fn update_transaction(&self) -> String {
+        todo!();
+    }
+    pub async fn delete_transaction(&self) -> String {
+        todo!();
+    }
+    pub async fn create_member_transaction(&self) -> String {
+        todo!();
+    }
+    pub async fn list_office_transaction(&self) -> String {
+        todo!();
+    }    
+    pub async fn find_office_transaction(&self) -> String {
+        todo!();
+    }
+    pub async fn update_office_transaction(&self) -> String {
+        todo!();
+    }
+    pub async fn delete_office_transaction(&self) -> String {
+        todo!();
+    }
+    pub async fn list_on_report(&self) -> String {
+        todo!();
+    }
+    pub async fn list_on_report_unit(&self) -> String {
+        todo!();
+    }
+    pub async fn upload_receipt(&self) -> String {
+        todo!();
+    }
+    pub async fn upload_member_receipt(&self) -> String {
+        todo!();
+    }
+    pub async fn find_office_uploaded_file(&self) -> String {
+        todo!();
+    }
+    pub async fn find_uploaded_file(&self) -> String {
+        todo!();
+    }
+    pub async fn find_ex_journal(&self) -> String {
+        todo!();
+    }
+    pub async fn list_ex_journal(&self) -> String {
+        todo!();
+    }
+
+    
+
 }
 
 #[cfg(test)]

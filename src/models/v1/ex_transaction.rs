@@ -1,5 +1,7 @@
 use serde::{Deserialize, Serialize};
-use std::fmt::Display;
+use std::{fmt::Display, vec};
+
+use crate::models::v1::mf_file::MFFile;
 
 #[derive(Serialize, Debug, Clone, Default)]
 pub struct ExTransactionParameters {
@@ -25,10 +27,81 @@ pub struct ExTransactionParameters {
 #[derive(Deserialize, Debug, Clone)]
 pub struct ExTransactionModel {
     id: String,
-    identification_code: String,
-    office_type_id: u8,
-    name: String,
+    number: Option<u32>,
+    remark: Option<String>,
+    value: Option<f32>,
+    report_number: Option<String>,
+    currency: Option<String>,
+    use_custom_jpy_rate: Option<String>,
+    automatic_status: Option<String>,
+    error_message: Option<String>,
+    warning_message: Option<String>,
+    office_member_id: Option<String>,
+    ex_item_id: Option<String>,
+    dr_excise_id: Option<String>,
+    dept_id: Option<String>,
+    project_code_id: Option<String>,
+    cr_item_id: Option<String>,
+    cr_sub_item_id: Option<String>,
+    attendants_count: Option<u8>,
+    created_at: Option<String>,
+    updated_at: Option<String>,
+    receipt_type: Option<String>,
+    office_member: Option<String>, //TODO
+    ex_item: Option<String>, //TODO
+    dr_excise: Option<String>, //TODO
+    cr_item: Option<String>, //TODO
+    cr_sub_item: Option<String>, //TODO
+    project_code: Option<String>, //TODO
+    ex_report: Option<String>, //TODO
+    ex_report_unit: Option<String>, //TODO
+    mf_file: Option<MFFile>,
+    attendants: Option<Vec<Attendant>>,
+    attendants_summary: Option<AttentdantsSummay>,
+    family_state: Option<u8>,
+    ex_transaction_family: Option<Vec<ExTransactionFamily>>,
+    invoice_registration_number: Option<String>,
+    special_exception_status: Option<String>,
+    invoice_kind: Option<u32>,
+    excise_code: Option<String>,
+    excise_value: Option<u32>,
+    purchase_tax_credit: Option<u32>,
+    ex_transaction_custom_field_values: Option<Vec<ExTransactionCustomFieldValues>>,
 }
+
+#[derive(Deserialize, Debug, Clone)]
+struct Attendant {
+    id: String,
+    name: String,
+    company_name: String,
+    depertment_name: Option<String>,
+    position_name: Option<String>,
+    is_own_company: bool,
+}
+
+#[derive(Deserialize, Debug, Clone)]
+struct AttentdantsSummay {
+    own_name: Option<String>,
+    own_count: Option<u8>,
+    other_name: Option<String>,
+    other_count: Option<u8>
+}
+
+#[derive(Deserialize, Debug, Clone)]
+struct ExTransactionFamily {
+    id: String,
+}
+
+#[derive(Deserialize, Debug, Clone)]
+struct ExTransactionCustomFieldValues {
+    ex_transaction_custom_field_id: Option<String>,
+    ex_transaction_custom_field_label: Option<String>,
+    ex_transaction_custom_field_type: Option<String>,
+    diplay_value: Option<String>,
+    value: Option<String>,
+    name: Option<String>,
+}
+
 
 #[derive(Deserialize, Debug, Clone)]
 pub struct ExTransactionResponse {
