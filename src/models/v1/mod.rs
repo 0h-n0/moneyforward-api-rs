@@ -1,6 +1,7 @@
 pub mod active_ex_daily_pay_type;
 pub mod active_project_codes;
 pub mod actvie_depts;
+pub mod bank;
 pub mod dept;
 pub mod e_doc;
 pub mod ex_daily_pay;

@@ -20,8 +20,8 @@ impl Office<'_> {
         query: Option<OfficeParameters>,
     ) -> Result<OfficeResponse, fmt::Error> {
         let res = self.client.get_with_query("", version, &query).await?;
-        let model = serde_json::from_str::<OfficeResponse>(&res).unwrap();
-        Ok(model)
+        let res = serde_json::from_str::<OfficeResponse>(&res).unwrap();
+        Ok(res)
     }
 }
 

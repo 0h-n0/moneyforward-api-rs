@@ -2,7 +2,7 @@ use chrono::format;
 
 use crate::client::Client;
 use crate::client::VERSION;
-use crate::models::v1::ex_transaction::ExTransactionParameters;
+use crate::models::v1::ex_transaction::{ExTransactionResponse, ExTransactionParameters};
 use std::fmt;
 use tracing_test::traced_test;
 
@@ -22,10 +22,12 @@ impl ExTransaction<'_> {
         version: VERSION,
         office_id: String,
         query: Option<ExTransactionParameters>,
-    ) -> Result<String, fmt::Error> {
+    ) -> Result<ExTransactionResponse, fmt::Error> {
         let path = format!("{}/me/ex_transactions", office_id);
         let res = self.client.get_with_query(&path, version, &query).await?;
-        //let model = serde_json::from_str::<OfficeResponse>(&res).unwrap();
+        println!("{:?}", res);
+        let res = serde_json::from_str::<ExTransactionResponse>(&res).unwrap();
+        println!("{:?}", res);
         Ok(res)
     }
     pub async fn create_transaction(&self) -> String {
@@ -102,5 +104,6 @@ mod tests {
             .list(VERSION::V1, office_id, Some(params))
             .await
             .unwrap();
+        println!("{:?}", a);
     }
 }

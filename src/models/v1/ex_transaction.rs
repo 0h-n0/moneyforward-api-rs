@@ -1,7 +1,13 @@
 use serde::{Deserialize, Serialize};
 use std::{fmt::Display, vec};
 
+use crate::models::v1::ex_item::{ExItem, Item, SubItem};
+use crate::models::v1::ex_office_member_setting::OfficeMember;
+use crate::models::v1::ex_report::ExReport;
+use crate::models::v1::ex_report_unit::ExReportUnit;
+use crate::models::v1::excise::Excise;
 use crate::models::v1::mf_file::MFFile;
+use crate::models::v1::project_code::ProjectCode;
 
 #[derive(Serialize, Debug, Clone, Default)]
 pub struct ExTransactionParameters {
@@ -47,14 +53,14 @@ pub struct ExTransactionModel {
     created_at: Option<String>,
     updated_at: Option<String>,
     receipt_type: Option<String>,
-    office_member: Option<String>,  //TODO
-    ex_item: Option<String>,        //TODO
-    dr_excise: Option<String>,      //TODO
-    cr_item: Option<String>,        //TODO
-    cr_sub_item: Option<String>,    //TODO
-    project_code: Option<String>,   //TODO
-    ex_report: Option<String>,      //TODO
-    ex_report_unit: Option<String>, //TODO
+    office_member: Option<OfficeMember>,
+    ex_item: Option<ExItem>,
+    dr_excise: Option<Excise>,
+    cr_item: Option<Item>,
+    cr_sub_item: Option<SubItem>,
+    project_code: Option<ProjectCode>,
+    ex_report: Option<ExReport>,
+    ex_report_unit: Option<ExReportUnit>,
     mf_file: Option<MFFile>,
     attendants: Option<Vec<Attendant>>,
     attendants_summary: Option<AttentdantsSummay>,
@@ -104,7 +110,7 @@ struct ExTransactionCustomFieldValues {
 
 #[derive(Deserialize, Debug, Clone)]
 pub struct ExTransactionResponse {
-    pub offices: Vec<ExTransactionModel>,
+    pub ex_transactions: Vec<ExTransactionModel>,
     pub next: Option<String>,
     pub prev: Option<String>,
 }
