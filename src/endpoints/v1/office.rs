@@ -18,10 +18,16 @@ impl Office<'_> {
         &self,
         version: VERSION,
         query: Option<OfficeParameters>,
-    ) -> Result<OfficeResponse, fmt::Error> {
-        let res = self.client.get_with_query("", version, &query).await?;
-        let res = serde_json::from_str::<OfficeResponse>(&res).unwrap();
-        Ok(res)
+    ) -> Result<OfficeResponse, Box<dyn std::error::Error>> {
+        let (res, status) = self.client.get_with_query("", version, &query).await?;        
+        match status {
+            reqwest::StatusCode::OK => {
+                let res = serde_json::from_str::<OfficeResponse>(&res).unwrap();
+                return Ok(res)}
+            _ => {
+                return Err(format!("Status code: {}, msg: {:?}", status, res).into());
+            }
+        }
     }
 }
 
@@ -33,7 +39,7 @@ mod tests {
     async fn it_works() {
         let params = OfficeParameters { page: 1 };
         let api_key = std::env::var("MF_ACCESS_TOKEN").unwrap();
-        let client = Client::new(api_key);
+        let client = Client::new(api_key);    
         let a = client
             .office()
             .list(VERSION::V1, Some(params))

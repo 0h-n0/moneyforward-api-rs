@@ -2,12 +2,13 @@ use chrono::{DateTime, Local};
 use serde::{Deserialize, Serialize};
 use std::fmt::Display;
 
-#[derive(Serialize, Debug, Clone)]
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct OfficeParameters {
     pub page: u32,
 }
 
-#[derive(Deserialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct OfficeModel {
     id: String,
     identification_code: String,
@@ -15,7 +16,7 @@ pub struct OfficeModel {
     name: String,
 }
 
-#[derive(Deserialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct OfficeResponse {
     pub offices: Vec<OfficeModel>,
     pub next: Option<String>,

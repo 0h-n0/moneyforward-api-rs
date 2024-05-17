@@ -9,7 +9,7 @@ use crate::models::v1::excise::Excise;
 use crate::models::v1::mf_file::MFFile;
 use crate::models::v1::project_code::ProjectCode;
 
-#[derive(Serialize, Debug, Clone, Default)]
+#[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct ExTransactionParameters {
     pub page: Option<u32>,
     pub dept_id: Option<String>,
@@ -30,7 +30,7 @@ pub struct ExTransactionParameters {
     pub is_recoginized_at_bank: Option<bool>,
 }
 
-#[derive(Deserialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct ExTransactionModel {
     id: String,
     number: Option<u32>,
@@ -75,7 +75,7 @@ pub struct ExTransactionModel {
     ex_transaction_custom_field_values: Option<Vec<ExTransactionCustomFieldValues>>,
 }
 
-#[derive(Deserialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 struct Attendant {
     id: String,
     name: String,
@@ -85,7 +85,7 @@ struct Attendant {
     is_own_company: bool,
 }
 
-#[derive(Deserialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 struct AttentdantsSummay {
     own_name: Option<String>,
     own_count: Option<u8>,
@@ -93,12 +93,12 @@ struct AttentdantsSummay {
     other_count: Option<u8>,
 }
 
-#[derive(Deserialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 struct ExTransactionFamily {
     id: String,
 }
 
-#[derive(Deserialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 struct ExTransactionCustomFieldValues {
     ex_transaction_custom_field_id: Option<String>,
     ex_transaction_custom_field_label: Option<String>,
@@ -108,7 +108,7 @@ struct ExTransactionCustomFieldValues {
     name: Option<String>,
 }
 
-#[derive(Deserialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct ExTransactionResponse {
     pub ex_transactions: Vec<ExTransactionModel>,
     pub next: Option<String>,

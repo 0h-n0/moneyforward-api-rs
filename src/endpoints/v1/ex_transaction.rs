@@ -24,10 +24,8 @@ impl ExTransaction<'_> {
         query: Option<ExTransactionParameters>,
     ) -> Result<ExTransactionResponse, fmt::Error> {
         let path = format!("{}/me/ex_transactions", office_id);
-        let res = self.client.get_with_query(&path, version, &query).await?;
-        println!("{:?}", res);
+        let (res, status) = self.client.get_with_query(&path, version, &query).await?;
         let res = serde_json::from_str::<ExTransactionResponse>(&res).unwrap();
-        println!("{:?}", res);
         Ok(res)
     }
     pub async fn create_transaction(&self) -> String {

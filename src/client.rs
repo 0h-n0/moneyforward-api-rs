@@ -1,5 +1,5 @@
 use core::fmt;
-use reqwest;
+use reqwest::{self, StatusCode};
 use serde::Serialize;
 use std::{collections::HashMap, fs::create_dir};
 use tokio;
@@ -53,21 +53,22 @@ impl Client {
             .bearer_auth(&self.api_key);
         request
     }
-    pub async fn get(&self, path: &str, version: VERSION) -> Result<String, fmt::Error> {
+    pub async fn get(&self, path: &str, version: VERSION) -> Result<(String, StatusCode), Box<dyn std::error::Error>> {
         let response = self
             .build_request(reqwest::Method::GET, path, version, "application/json")
             .send()
             .await
             .unwrap();
-        let text = response.text().await.unwrap();
-        Ok(text)
+        let status = response.status();
+        let text = response.text().await.unwrap();        
+        Ok((text, status))
     }
     pub async fn get_with_query<Q>(
         &self,
         path: &str,
         version: VERSION,
         query: &Q,
-    ) -> Result<String, fmt::Error>
+    ) -> Result<(String, StatusCode), fmt::Error>
     where
         Q: Serialize,
     {
@@ -77,9 +78,9 @@ impl Client {
             .send()
             .await
             .unwrap();
-        debug!("status: {:?}", response.status());
+        let status = response.status().clone();
         let text = response.text().await.unwrap();
-        Ok(text)
+        Ok((text, status))
     }
 
     pub async fn post(self) {}
