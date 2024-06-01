@@ -4,7 +4,7 @@ use std::fmt::Display;
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct OfficeParameters {
-    pub page: u32,
+    pub page: Option<u32>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]

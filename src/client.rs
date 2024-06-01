@@ -46,7 +46,7 @@ impl Client {
     ) -> reqwest::RequestBuilder {
         let url = format!("{}/{}/offices/{}", self.base_url, version, path);
         debug!("url: {}", url);
-        let mut request = self
+        let request = self
             .http_client
             .request(method, &url)
             .header(reqwest::header::CONTENT_TYPE, content_type)
@@ -64,7 +64,7 @@ impl Client {
             .await
             .unwrap();
         let status = response.status();
-        let text = response.text().await.unwrap();
+        let text = response.text().await?;
         Ok((text, status))
     }
     pub async fn get_with_query<Q>(
@@ -72,7 +72,7 @@ impl Client {
         path: &str,
         version: VERSION,
         query: &Q,
-    ) -> Result<(String, StatusCode), fmt::Error>
+    ) -> Result<(String, StatusCode), Box<dyn std::error::Error>>
     where
         Q: Serialize,
     {
@@ -83,7 +83,7 @@ impl Client {
             .await
             .unwrap();
         let status = response.status().clone();
-        let text = response.text().await.unwrap();
+        let text = response.text().await?;
         Ok((text, status))
     }
 

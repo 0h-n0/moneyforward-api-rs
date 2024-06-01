@@ -1,7 +1,15 @@
-use crate::client::Client;
-use crate::client::VERSION;
-use crate::models::v1::office::{OfficeParameters, OfficeResponse};
-use std::fmt;
+use crate::{
+    client::{
+        Client,
+        VERSION
+    },
+    models::v1::office::{
+        OfficeParameters, 
+        OfficeResponse
+    },
+    endpoints::v1::utils::parse_response
+};
+
 
 pub struct Office<'a> {
     client: &'a Client,
@@ -19,16 +27,9 @@ impl Office<'_> {
         version: VERSION,
         query: Option<OfficeParameters>,
     ) -> Result<OfficeResponse, Box<dyn std::error::Error>> {
-        let (res, status) = self.client.get_with_query("", version, &query).await?;
-        match status {
-            reqwest::StatusCode::OK => {
-                let res = serde_json::from_str::<OfficeResponse>(&res).unwrap();
-                return Ok(res);
-            }
-            _ => {
-                return Err(format!("Status code: {}, msg: {:?}", status, res).into());
-            }
-        }
+        let (text, status) = self.client.get_with_query("", version, &query).await?;
+        let (res, status) = parse_response(text, status)?;
+        Ok(res)
     }
 }
 
@@ -37,10 +38,35 @@ mod tests {
     use super::*;
 
     #[tokio::test]
-    async fn it_works() {
-        let params = OfficeParameters { page: 1 };
-        let api_key = std::env::var("MF_ACCESS_TOKEN").unwrap();
-        let client = Client::new(api_key);
+    async fn test_list() {
+        let path = "/v1/offices/";
+        let body = r#"{
+            "offices": [
+              {
+                "id": "string",
+                "identification_code": "09999999",
+                "office_type_id": 2,
+                "name": "string"
+              }
+            ],
+            "next": "/api/external/v1/offices?page=3",
+            "prev": "/api/external/v1/offices?page=1"
+        }"#;
+        let mut server = mockito::Server::new_async().await;
+        let mock = server
+            .mock("GET", path)
+            .with_status(200)
+            .with_header("content-type", "application/json")
+            .with_body(body)
+            .create();
+
+        let url = server.url();
+        let client = Client {
+            http_client: reqwest::Client::new(),
+            base_url: url.clone(),
+            api_key: "".to_string(),
+        };    
+        let params = OfficeParameters { page: None };        
         let a = client
             .office()
             .list(VERSION::V1, Some(params))
