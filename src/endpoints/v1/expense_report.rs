@@ -1,7 +1,7 @@
 use crate::client::Client;
 use crate::client::VERSION;
-use std::fmt;
 use crate::models::v1::expense_report::{ExpenseReportParameters, ExpenseReportResponse};
+use std::fmt;
 use tracing_test::traced_test;
 
 pub struct ExpenseReport<'a> {
@@ -26,11 +26,12 @@ impl ExpenseReport<'_> {
         match status {
             reqwest::StatusCode::OK => {
                 let res = serde_json::from_str::<ExpenseReportResponse>(&res).unwrap();
-                return Ok(res)}
+                return Ok(res);
+            }
             _ => {
                 return Err(format!("Status code: {}, msg: {:?}", status, res).into());
             }
-        }        
+        }
     }
 }
 

@@ -6,7 +6,7 @@ use std::fmt::Display;
 pub struct Dept {
     id: Option<String>,
     name: String,
-    code: String,
+    code: Option<String>,
     disp_order: Option<u32>,
     is_active: Option<bool>,
     parent_id: Option<String>,

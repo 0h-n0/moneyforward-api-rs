@@ -1,3 +1,4 @@
+use chrono::{DateTime, Local};
 use serde::{Deserialize, Serialize};
 use std::{fmt::Display, vec};
 
@@ -31,14 +32,14 @@ pub struct ExTransactionParameters {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
-pub struct ExTransactionModel {
+pub struct ExTransaction {
     id: String,
     number: Option<u32>,
     remark: Option<String>,
     value: Option<f32>,
     report_number: Option<String>,
     currency: Option<String>,
-    use_custom_jpy_rate: Option<String>,
+    use_custom_jpy_rate: Option<bool>,
     automatic_status: Option<String>,
     error_message: Option<String>,
     warning_message: Option<String>,
@@ -50,8 +51,8 @@ pub struct ExTransactionModel {
     cr_item_id: Option<String>,
     cr_sub_item_id: Option<String>,
     attendants_count: Option<u8>,
-    created_at: Option<String>,
-    updated_at: Option<String>,
+    created_at: Option<DateTime<Local>>,
+    updated_at: Option<DateTime<Local>>,
     receipt_type: Option<String>,
     office_member: Option<OfficeMember>,
     ex_item: Option<ExItem>,
@@ -110,7 +111,7 @@ struct ExTransactionCustomFieldValues {
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct ExTransactionResponse {
-    pub ex_transactions: Vec<ExTransactionModel>,
+    pub ex_transactions: Vec<ExTransaction>,
     pub next: Option<String>,
     pub prev: Option<String>,
 }

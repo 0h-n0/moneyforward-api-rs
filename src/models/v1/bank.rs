@@ -19,7 +19,7 @@ pub struct BankBranch {
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct ReimburseBankAccount {
     id: String,
-    account_type: String,
+    account_type: u32,
     number: String,
     holder_name: String,
     holder_name_kana: String,

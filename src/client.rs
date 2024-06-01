@@ -53,14 +53,18 @@ impl Client {
             .bearer_auth(&self.api_key);
         request
     }
-    pub async fn get(&self, path: &str, version: VERSION) -> Result<(String, StatusCode), Box<dyn std::error::Error>> {
+    pub async fn get(
+        &self,
+        path: &str,
+        version: VERSION,
+    ) -> Result<(String, StatusCode), Box<dyn std::error::Error>> {
         let response = self
             .build_request(reqwest::Method::GET, path, version, "application/json")
             .send()
             .await
             .unwrap();
         let status = response.status();
-        let text = response.text().await.unwrap();        
+        let text = response.text().await.unwrap();
         Ok((text, status))
     }
     pub async fn get_with_query<Q>(
